@@ -1,0 +1,43 @@
+{
+  "base_names": [
+    "Bella", "Luna", "Charlie", "Max", "Cooper", "Rocky", "Buddy", "Coco", "Simba", "Milo",
+    "Bailey", "Leo", "Daisy", "Lola", "Sadie", "Molly", "Stella", "Chloe", "Maggie", "Sophie",
+    "Bhairava", "Arjun", "Krishna", "Lakshmi", "Gauri", "Nandi", "Sheru", "Badshah", "Rani", "Moti",
+    "Zeus", "Thor", "Apollo", "Athena", "Hera", "Odin", "Freya", "Loki", "Atlas", "Titan",
+    "Oreo", "Biscuit", "Cookie", "Brownie", "Muffin", "Cupcake", "Snowball", "Fluffy", "Shadow", "Midnight"
+  ],
+  "prefixes": {
+    "cute": ["Lil", "Baby", "Tiny", "Sweet", "Poka", "Jelly", "Honey", "Cuddle", "Snuggle", "Pia"],
+    "strong": ["King", "Captain", "Major", "General", "Chief", "Boss", "Iron", "Thunder", "Blaze", "Storm"],
+    "royal": ["Prince", "Princess", "Lady", "Lord", "Duke", "Baron", "Queen", "Emperor", "Sir", "Count"],
+    "funny": ["Mr.", "Mrs.", "Dr.", "Professor", "Captain", "Sir", "Madam", "Agent", "Sheriff", "Deputy"]
+  },
+  "suffixes": {
+    "cute": ["berry", "pie", "boo", "kins", "poo", "bean", "puff", "muffin", "drop", "star"],
+    "strong": ["claw", "fang", "storm", "beast", "guard", "bot", "tron", "rex", "thor", "wolf"],
+    "royal": ["heart", "soul", "spirit", "guard", "warden", "keeper", "regent", "monarch", "crown", "scepter"],
+    "funny": ["pants", "face", "ster", "meister", "zilla", "saurus", "nado", "waffle", "nugget", "monster"]
+  },
+  "patterns": {
+    "standard": ["{name}"],
+    "descriptive": ["{prefix} {name}", "{name} {suffix}"],
+    "combo": ["{prefix} {name} {suffix}"]
+  },
+  "categories": {
+    "Dog": ["Charlie", "Max", "Cooper", "Rocky", "Buddy", "Bhairava", "Sheru"],
+    "Cat": ["Luna", "Bella", "Simba", "Milo", "Leo", "Nandi", "Moti"],
+    "Bird": ["Rio", "Sky", "Kiwi", "Sunny", "Coco", "Mithu", "Tota"],
+    "Rabbit": ["Oreo", "Thumper", "Bun Bun", "Daisy", "Snowball", "Chiku", "Laddoo"]
+  },
+  "gender_map": {
+    "Male": ["Charlie", "Max", "Cooper", "Rocky", "Buddy", "Simba", "Milo", "Leo", "Bhairava", "Arjun", "Krishna", "Nandi", "Sheru", "Badshah", "Zeus", "Thor", "Apollo", "Odin", "Loki", "Atlas", "Titan"],
+    "Female": ["Bella", "Luna", "Daisy", "Lola", "Sadie", "Molly", "Stella", "Chloe", "Maggie", "Sophie", "Lakshmi", "Gauri", "Rani", "Athena", "Hera", "Freya"]
+  },
+  "emotion_map": {
+    "Loving": ["Bella", "Luna", "Daisy", "Molly", "Coco", "Cookie", "Honey", "Sweet", "Cuddle"],
+    "Playful": ["Milo", "Leo", "Buddy", "Simba", "Oreo", "Biscuit", "Sparky", "Ziggy", "Jelly"],
+    "Protective": ["Max", "Cooper", "Rocky", "Zeus", "Thor", "Bhairava", "Sheru", "Badshah", "Iron", "Thunder"],
+    "Proud": ["Charlie", "Bailey", "Stella", "Chloe", "Sophie", "Lakshmi", "Gauri", "Arjun", "Krishna", "Royal"],
+    "Funny": ["Oreo", "Biscuit", "Cookie", "Brownie", "Muffin", "Cupcake", "Snowball", "Fluffy", "Mr.", "Mrs."]
+  }
+}

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetName Genie</title>
+    <meta name="description" content="Generate unique and meaningful names for your pets with PetName Genie.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="stylesheet" href="assets/css/accessibility.css">
+
+    <!-- Favicon (using logo svg) -->
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header class="site-header">
+        <div class="container header-content" style="justify-content: flex-end;">
+            <div class="header-controls">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Dark Mode">
+                    <span class="icon">🌓</span>
+                </button>
+                <button id="accessibility-toggle" class="icon-btn" aria-label="Accessibility Options">
+                    <span class="icon">Aa</span>
+                </button>
+                <button id="reset-app-btn" class="icon-btn" aria-label="Reset App" title="Start Over">
+                    <span class="icon">🔄</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="branding-section container">
+        <img src="assets/images/logo.png" alt="PetName Genie Logo" class="brand-logo">
+        <h1 class="brand-title">PetName Genie</h1>
+    </div>
+
+    <!-- Accessibility Menu (Hidden by default) -->
+    <div id="accessibility-panel" class="accessibility-panel" hidden>
+        <h3>Accessibility Options</h3>
+        <label class="toggle-control">
+            <span>Large Text</span>
+            <input type="checkbox" id="large-text-toggle">
+            <span class="toggle-switch"></span>
+        </label>
+        <label class="toggle-control">
+            <span>High Contrast</span>
+            <input type="checkbox" id="high-contrast-toggle">
+            <span class="toggle-switch"></span>
+        </label>
+    </div>
+
+    <main id="main-content" class="container">
+        <section class="generator-section card">
+            <h2>Create Your Pet's Identity</h2>
+            <form id="generator-form">
+                <div class="form-grid">
+                    <!-- Pet Type -->
+                    <div class="form-group">
+                        <label for="pet-type">Pet Type</label>
+                        <select id="pet-type" name="pet-type" required>
+                            <option value="Dog">Dog 🐕</option>
+                            <option value="Cat">Cat 🐈</option>
+                            <option value="Bird">Bird 🦜</option>
+                            <option value="Rabbit">Rabbit 🐇</option>
+                        </select>
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="form-group">
+                        <label for="pet-gender">Gender</label>
+                        <div class="radio-group">
+                            <label class="radio-card">
+                                <input type="radio" name="gender" value="Male" checked>
+                                <span>Male ♂️</span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="gender" value="Female">
+                                <span>Female ♀️</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Emotional Bond -->
+                    <div class="form-group">
+                        <label for="pet-emotion">Emotional Bond</label>
+                        <select id="pet-emotion" name="emotion">
+                            <option value="Loving">Loving ❤️</option>
+                            <option value="Playful">Playful 🎾</option>
+                            <option value="Protective">Protective 🛡️</option>
+                            <option value="Proud">Proud 🏆</option>
+                            <option value="Funny">Funny 🤪</option>
+                        </select>
+                    </div>
+
+                    <!-- Name Style -->
+                    <div class="form-group">
+                        <label for="name-style">Style</label>
+                        <select id="name-style" name="style">
+                            <option value="Any">Any Style</option>
+                            <option value="Cute">Cute</option>
+                            <option value="Strong">Strong</option>
+                            <option value="Royal">Royal</option>
+                            <option value="Modern">Modern</option>
+                        </select>
+                    </div>
+
+                    <!-- Origin -->
+                    <div class="form-group">
+                        <label for="name-origin">Origin / Culture</label>
+                        <select id="name-origin" name="origin">
+                            <option value="Global">Global 🌍</option>
+                            <option value="Indian">Indian 🇮🇳</option>
+                            <option value="Western">Western 🤠</option>
+                            <option value="Cute">Cute Nicknames 🍬</option>
+                        </select>
+                    </div>
+
+                    <!-- Meaning Language -->
+                    <div class="form-group">
+                        <label for="meaning-lang">Meaning Language</label>
+                        <select id="meaning-lang" name="meaning-lang">
+                            <option value="en">English</option>
+                            <option value="te">Telugu</option>
+                            <option value="hi">Hindi</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Advanced / Optional -->
+                <details class="advanced-options">
+                    <summary>Optional Details (Image, Age)</summary>
+                    <div class="form-grid mt-1">
+                        <div class="form-group">
+                            <label for="pet-age">Age (Years)</label>
+                            <input type="number" id="pet-age" min="0" max="30" placeholder="e.g. 2">
+                        </div>
+                        <div class="form-group">
+                            <label for="pet-image">Photo</label>
+                            <input type="file" id="pet-image" accept="image/*">
+                        </div>
+                    </div>
+                </details>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary cta-btn">
+                        <span class="icon">✨</span> Generate Names
+                    </button>
+                    <button type="button" id="surprise-btn" class="btn btn-secondary">
+                        <span class="icon">🎲</span> Surprise Me
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Results Section -->
+        <section id="results-section" class="results-section" hidden>
+            <div class="section-header">
+                <h2>Generated Names</h2>
+                <div class="results-actions">
+                   <button id="clear-results" class="text-btn">Clear</button>
+                </div>
+            </div>
+            
+            <div id="results-grid" class="results-grid">
+                <!-- Cards injected by JS -->
+            </div>
+        </section>
+
+        <!-- Favorites & History -->
+        <section class="user-lists-section">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="favorites">Favorites ❤️</button>
+                <button class="tab-btn" data-tab="history">History 📜</button>
+            </div>
+            <div id="favorites-panel" class="tab-panel active">
+                <div id="favorites-list" class="list-container empty-state-text">No favorites yet.</div>
+            </div>
+            <div id="history-panel" class="tab-panel" hidden>
+                <div id="history-list" class="list-container empty-state-text">No history yet.</div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 PetName Genie. Handcrafted for your pets.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="assets/js/utils.js"></script>
+    <script type="module" src="assets/js/accessibility.js"></script>
+    <script type="module" src="assets/js/imageHandler.js"></script>
+    <script type="module" src="assets/js/nameGenerator.js"></script>
+    <script type="module" src="assets/js/favorites.js"></script>
+    <script type="module" src="assets/js/history.js"></script>
+    <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+1.  **Smart Name Generation**: Generates names based on Pet Type, Gender, and Emotional Bond.
+2.  **Cultural Customization**: Supports Global, Indian, Western, and Cute name styles.
+3.  **Multilingual Meanings**: Provides name meanings in English, Telugu, and Hindi.
+4.  **Advanced Filtering**: Users can filter by Name Style (Cute, Strong, Royal, Modern).
+5.  **Offline Capability**: Fully functional without internet access.
+6.  **Accessibility First**: Includes Dark Mode, Large Text, and High Contrast toggles.
+7.  **Favorites System**: Save preferred names to local storage for future reference.
+8.  **Session History**: Tracks recently generated names within the session.
+9.  **Social Sharing**: Share generated names via Web Share API.
+10. **Responsive Design**: Optimized for Mobile, Tablet, and Desktop views.

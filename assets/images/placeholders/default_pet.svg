@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+  <rect width="300" height="300" fill="#e0e0e0"/>
+  <circle cx="150" cy="120" r="50" fill="#bbb"/>
+  <circle cx="150" cy="90" r="40" fill="#e0e0e0"/> <!-- Face cutout -->
+  <path d="M100,250 Q150,300 200,250" stroke="#bbb" stroke-width="5" fill="none"/>
+  <text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="24" fill="#999">No Image</text>
+</svg>

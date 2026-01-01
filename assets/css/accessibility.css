@@ -1,0 +1,39 @@
+/* Large Text Mode */
+body.large-text-mode {
+    font-size: 1.25rem;
+}
+
+body.large-text-mode .logo-text {
+    font-size: 1.5rem;
+}
+
+body.large-text-mode .generated-name {
+    font-size: 2rem;
+}
+
+/* High Contrast Mode */
+body.high-contrast-mode {
+    --primary-color: #0000ee;
+    --primary-hover: #0000aa;
+    --secondary-color: #aa0000;
+    --bg-color: #ffffff;
+    --card-bg: #ffffff;
+    --text-main: #000000;
+    --text-muted: #000000;
+    --border-color: #000000;
+}
+
+body.high-contrast-mode[data-theme="dark"] {
+    --primary-color: #ffff00;
+    --primary-hover: #dddd00;
+    --secondary-color: #ff00ff;
+    --bg-color: #000000;
+    --card-bg: #000000;
+    --text-main: #ffffff;
+    --text-muted: #ffffff;
+    --border-color: #ffffff;
+}
+
+body.high-contrast-mode .btn {
+    border: 2px solid currentColor;
+}

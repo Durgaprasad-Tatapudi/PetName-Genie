@@ -1,0 +1,14 @@
+Q1: What is the core logic behind the name generation?
+A1: It uses a rule-based system that combines base names from a category (e.g., Dog) with prefix/suffix patterns based on the selected Style (e.g., "Lil" + Name for Cute style).
+
+Q2: How is data stored?
+A2: Static data is stored in local JSON files. User data (Favorites) is stored in the browser's localStorage.
+
+Q3: Why use Vanilla JS instead of a framework?
+A3: For this scale of application, Vanilla JS offers better performance (no bundle overhead) and strictly meets the project constraint of avoiding external frameworks.
+
+Q4: How does the app handle offline usage?
+A4: All assets (HTML, CSS, JS, JSON) are local. Once loaded (or if opened from file system), no network requests are made to external servers.
+
+Q5: Function of the Accessibility features?
+A5: Logic in `accessibility.js` toggles CSS classes on the `<body>` tag, which overrides CSS variables for contrast and font size defined in `accessibility.css`.

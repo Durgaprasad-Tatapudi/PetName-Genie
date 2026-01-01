@@ -1,0 +1,3 @@
+PetName Genie is a single-page web application designed to help pet owners find unique, culturally rich, and emotion-centric names for their pets. Unlike random generators, this tool uses a rule-based logic engine to generate names that align with specific emotional bonds (e.g., Loving, Protective, Proud) and cultural origins (Global, Indian, Western).
+
+The system operates offline using local JSON datasets and requires no backend server. It features a modern, responsive UI built with vanilla HTML/CSS/JS, ensuring high performance and accessibility (including dark mode and high contrast support). Key features include name meaning explanations in multiple languages (English, Telugu, Hindi) and session-based history tracking.
