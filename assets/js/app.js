@@ -4,15 +4,19 @@ import { initImageHandler } from './imageHandler.js';
 import { initGenerator, generateNames } from './nameGenerator.js';
 import * as Favorites from './favorites.js';
 import * as History from './history.js';
+import { Pet3DWidget } from './widget3d.js';
 
 // Developer Comment as requested
 console.log("This project demonstrates rule-based artificial intelligence, explainable AI (XAI), multilingual knowledge representation, and user preference learning.");
 
 document.addEventListener('DOMContentLoaded', async () => {
     initAccessibility();
-    await initGenerator();
     const imageHandler = initImageHandler();
+    
+    // Init Real 3D Widget
+    try { new Pet3DWidget('hero-canvas'); } catch(e) { console.log("3D Widget skipped", e); }
 
+    // UI Elements
     const form = $('#generator-form');
     const resultsSection = $('#results-section');
     const resultsGrid = $('#results-grid');
@@ -20,6 +24,29 @@ document.addEventListener('DOMContentLoaded', async () => {
     const surpriseBtn = $('#surprise-btn');
     const resetBtn = $('#reset-app-btn');
     const tabBtns = $$('.tab-btn');
+    const generateBtn = form.querySelector('.cta-btn');
+
+    // State
+    let isDataReady = false;
+
+    // Initialize Data (Non-blocking)
+    initGenerator()
+        .then(() => {
+            isDataReady = true;
+            console.log("PetName Genie: Data loaded successfully.");
+            generateBtn.disabled = false;
+            generateBtn.innerHTML = '<span class="icon">✨</span> Generate Names';
+        })
+        .catch(err => {
+            console.error("PetName Genie: Critical Data Load Error", err);
+            showToast("Error loading data. Please refresh.", 10000);
+            generateBtn.textContent = "⚠️ Error Loading Data";
+            generateBtn.disabled = true;
+        });
+
+    // Set initial loading state
+    generateBtn.disabled = true;
+    generateBtn.innerHTML = '<span class="icon">⏳</span> Loading resources...';
 
     // Offline Indicator
     const offlineBadge = document.createElement('div');
@@ -54,15 +81,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderHistory();
 
     // Events
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        handleGeneration();
+        if(!isDataReady) {
+            showToast("Please wait, resources are still loading...");
+            return;
+        }
+        safeVibrate(15);
+        await handleGenerationAndUI();
     });
 
-    surpriseBtn.addEventListener('click', () => {
+    surpriseBtn.addEventListener('click', async () => {
+        safeVibrate(15);
         randomizeForm();
-        handleGeneration(true);
+        if(!isDataReady) {
+             showToast("Please wait, resources are still loading...");
+             return;
+        }
+        await handleGenerationAndUI(true);
     });
+
+    // Helper for safe haptics
+    function safeVibrate(ms) {
+        if (navigator.vibrate) {
+            try { navigator.vibrate(ms); } catch(e) {/* ignore */}
+        }
+    }
 
     clearResultsBtn.addEventListener('click', () => {
         resultsSection.hidden = true;
@@ -79,6 +123,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         $('#name-style').value = styles[Math.floor(Math.random() * styles.length)];
     }
 
+    async function handleGenerationAndUI(isSurprise = false) {
+        // UI Thinking State
+        const btn = form.querySelector('.cta-btn');
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = `<span class="icon spin">⚙️</span> AI Thinking...`;
+        
+        // Simulate "Processing" time for effect
+        await new Promise(r => setTimeout(r, 600));
+
+        try {
+            handleGeneration(isSurprise);
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+    }
+
     function handleGeneration(isSurprise = false) {
         const formData = new FormData(form);
         const criteria = {
@@ -91,11 +153,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             isSurprise
         };
 
-        const names = generateNames(criteria);
-        
-        if (names.length > 0) {
-            resultsSection.hidden = false;
-            resultsGrid.innerHTML = ''; 
+        console.log("Generating names with criteria:", criteria); // Debug Log
+
+        try {
+            const names = generateNames(criteria);
+            console.log("Generated names count:", names.length); // Debug Log
+            
+            if (names.length > 0) {
+                resultsSection.hidden = false;
+                resultsGrid.innerHTML = ''; 
+                
+                // Safety Layout Fix for Mobile
+                resultsSection.style.display = 'block'; 
             
             // Check consistency provided by first result (global check usually, but here per name generator logic)
             // Ideally consisteny check is pre-generation, but our generator returns it.
@@ -103,10 +172,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                 showToast(names[0].aiStats.consistencyWarning, 5000); // Show warning
             }
 
-            names.forEach(n => {
-                createNameCard(n, resultsGrid, criteria);
-            });
-            resultsSection.scrollIntoView({ behavior: 'smooth' });
+                names.forEach(n => {
+                    createNameCard(n, resultsGrid, criteria);
+                });
+                
+                // Scroll logic
+                setTimeout(() => {
+                     resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+
+            } else {
+                showToast("No names found for this combination. Try different settings!");
+            }
+        } catch (e) {
+            console.error("Generation Error:", e);
+            showToast("An error occurred while generating names.");
         }
     }
 
@@ -138,10 +218,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="tags">
                 <span class="tag">${data.tags[2]} Sound</span> <!-- Phonetic -->
                 <span class="tag" style="background:var(--secondary-color); color: white;">${data.uniqueness}</span>
+                <span class="tag">${data.origin} Origin</span>
             </div>
 
-            <div class="xai-summary" style="font-size: 0.75rem; color: var(--text-muted); margin: 0.5rem 0; border-left: 2px solid var(--primary-color); padding-left: 0.5rem;">
-                ${data.aiStats.explanation}
+            <div class="xai-summary" style="font-size: 0.85rem; background: var(--bg-color); border-radius: 8px; padding: 0.75rem; margin-bottom: 0.5rem;">
+                <strong>💡 AI Insight:</strong> ${data.aiStats.explanation}
             </div>
             
             <div class="card-actions">
@@ -286,10 +367,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 itemEl.style.display = 'flex';
                 itemEl.style.justifyContent = 'space-between';
                 itemEl.style.alignItems = 'center';
+                itemEl.style.transition = "all 0.3s ease"; /* Smooth list movement */
 
                 const rating = item.rating || 0;
                 const starsHtml = [1,2,3,4,5].map(i => 
-                    `<span class="star ${i <= rating ? 'active' : ''}" data-val="${i}">★</span>`
+                    `<span class="star ${i <= rating ? 'active' : ''}" data-val="${i}" role="button" tabindex="0">★</span>`
                 ).join('');
 
                 itemEl.innerHTML = `

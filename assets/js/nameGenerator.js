@@ -84,11 +84,19 @@ export function generateNames(criteria, count = 6) {
             // Enrich Data
             const meaningData = datasets.meanings[baseName] || { meaning: { en: "A unique friend" }, emotion: "Loyal" };
             
-            // Critical Telugu Fix: Fallback Logic
+            // Critical Telugu/Hindi Fix: Fallback Logic
             let localizedMeaning = meaningData.meaning[criteria.lang];
+            let meaningNote = "";
+
             if (!localizedMeaning) {
-                localizedMeaning = meaningData.meaning['en'] + (criteria.lang !== 'en' ? " (Meaning unavailable in selected language)" : "");
+                // FALLBACK: Use English
+                localizedMeaning = meaningData.meaning['en'];
+                if (criteria.lang === 'te') meaningNote = " (Telugu unavailable)";
+                if (criteria.lang === 'hi') meaningNote = " (Hindi unavailable)";
             }
+            
+            // Append note if exists
+            const displayMeaning = localizedMeaning + meaningNote;
             
             // AIML: Phonetic Analysis
             const soundProfile = analyzeSound(finalName);
@@ -102,7 +110,7 @@ export function generateNames(criteria, count = 6) {
             results.push({
                 name: finalName,
                 baseName: baseName,
-                meaning: localizedMeaning,
+                meaning: displayMeaning,
                 meaningObj: meaningData.meaning,
                 origin: datasets.cultures[baseName] || "Global",
                 tags: [datasets.cultures[baseName] || "Universal", meaningData.emotion || "Special", soundProfile.category],
@@ -125,67 +133,91 @@ export function generateNames(criteria, count = 6) {
 // ------ AIML Helper Functions ------
 
 function calculateConfidence(baseName, finalName, criteria, sound, meaningData) {
-    let score = 70; // Base score
+    let score = 75; // Initial base confidence
 
-    // 1. Emotion Match
+    // 1. Emotion Alignment (+/-)
     if (meaningData.emotion === criteria.emotion) score += 15;
-    
-    // 2. Sound Match (Heuristic)
-    // Soft sounds suit Loving/Cute, Strong suits Protective/Strong
-    if (criteria.emotion === 'Loving' && sound.category === 'Soft') score += 10;
-    if (criteria.emotion === 'Protective' && sound.category === 'Strong') score += 10;
-    
-    // 3. Length penalty/bonus
-    if (finalName.length > 12) score -= 5; // Too long
-    
-    // Cap at 99% (nothing is perfect AI :P)
-    return Math.min(99, Math.max(50, score));
+    else if (meaningData.emotion) score += 5; // Slight boost just for having known emotion
+
+    // 2. Sound Match (Phonetics)
+    // Soft -> Loving/Cute
+    if (['Loving', 'Cute', 'Peaceful'].includes(criteria.emotion) && sound.category === 'Soft') score += 10;
+    // Strong -> Protective/Royal
+    if (['Protective', 'Proud', 'Strong', 'Royal'].includes(criteria.emotion) && sound.category === 'Strong') score += 10;
+    // Sharp -> Funny/Playful/Modern
+    if (['Funny', 'Playful', 'Modern'].includes(criteria.emotion) && sound.category === 'Sharp') score += 10;
+
+    // 3. Cultural Match
+    const nameOrigin = datasets.cultures[baseName] || 'Global';
+    if (criteria.origin !== 'Global' && nameOrigin === criteria.origin) score += 10;
+
+    // 4. Length Penalties
+    if (finalName.length > 10) score -= 5;
+    if (finalName.length < 3) score -= 5;
+
+    // 5. Random AI Variance (to simulate "thinking")
+    score += Math.floor(Math.random() * 5); 
+
+    return Math.min(98, Math.max(60, score)); // Clap between 60% and 98%
 }
 
 function analyzeSound(name) {
-    const vowels = /[aeiouy]/gi;
-    const hardConsonants = /[kqtpdgb]/gi;
-    const softConsonants = /[lmnrszcv]/gi; // Approximation
+    const lower = name.toLowerCase();
+    const vowels = /[aeiouy]/g;
+    // Strong: K, T, P, D, G, B, R
+    const hardConsonants = /[ktpdgbr]/g;
+    // Soft: L, M, N, S, H, W
+    const softConsonants = /[lmnshw]/g;
+    // Sharp: Z, X, V, J, Q
+    const sharpConsonants = /[zxvjq]/g;
 
-    const vowelCount = (name.match(vowels) || []).length;
-    const hardCount = (name.match(hardConsonants) || []).length;
-    const softCount = (name.match(softConsonants) || []).length;
+    const vCount = (lower.match(vowels) || []).length;
+    const hCount = (lower.match(hardConsonants) || []).length;
+    const sCount = (lower.match(softConsonants) || []).length;
+    const zCount = (lower.match(sharpConsonants) || []).length;
 
     let category = "Balanced";
-    if (softCount > hardCount && vowelCount > name.length / 3) category = "Soft";
-    if (hardCount > softCount) category = "Strong";
-    if (name.includes('z') || name.includes('x') || name.includes('k')) category = "Sharp"; // Overrides
-    
-    return {
-        category,
-        vowelCount,
-        hardCount
-    };
+    let score = 0; // Negative = Soft, Positive = Hard
+
+    score += hCount * 1.5;
+    score += zCount * 2;
+    score -= sCount * 1;
+    score -= (vCount / lower.length) * 2; 
+
+    if (score > 1.5) category = "Strong";
+    else if (score < -1) category = "Soft";
+    else if (zCount > 0) category = "Sharp";
+
+    return { category, vCount, hCount, sCount };
 }
 
 function generateExplanation(criteria, sound, confidence, source) {
     let reasons = [];
     
-    // Emotion Reason
-    if (source === "Emotion Match") {
-        reasons.push(`${criteria.emotion} matches the name's inherent vibe.`);
-    } else if (source === "Gender Match") {
-        reasons.push(`Selected based on traditional ${criteria.gender} naming patterns.`);
+    // Source Reason
+    if (source === "Gender Match") reasons.push(`Matches typical ${criteria.gender.toLowerCase()} naming styles.`);
+    if (source === "Emotion Match") reasons.push(`Selected for its ${criteria.emotion.toLowerCase()} vibe.`);
+    
+    // Phonetic Reason
+    if (sound.category === 'Soft') {
+        reasons.push("Has a gentle, soft sound profile.");
+    } else if (sound.category === 'Strong') {
+        reasons.push("Uses strong consonants for a bold presence.");
+    } else if (sound.category === 'Sharp') {
+        reasons.push("Has a distinct, energetic ring to it.");
     }
 
-    // Sound Reason
-    if (sound.category === 'Soft') reasons.push("Has a soft, friendly phonetic structure.");
-    if (sound.category === 'Strong') reasons.push("Features strong consonants for impact.");
-    
     // Confidence Reason
-    if (confidence > 85) reasons.push("Highly aligned with your preferences.");
+    if (confidence > 88) reasons.push("A super-match based on your inputs!");
+    else if (confidence > 75) reasons.push("Solidly aligns with your preferences.");
 
-    return `AI suggested this because: ${reasons.slice(0, 2).join(' ')}`;
+    return reasons.slice(0, 2).join(" ");
 }
 
 function checkConsistency(style, emotion) {
     // Conflict Matrix
-    if (style === 'Strong' && emotion === 'Loving') return "Tip: Strong names might contrast with a Loving bond.";
-    if (style === 'Cute' && emotion === 'Protective') return "Tip: Cute names might not sound very Protective.";
+    if (style === 'Strong' && emotion === 'Loving') return "Tip: You asked for Strong names but a Loving bond. This name bridges both!";
+    if (style === 'Cute' && emotion === 'Protective') return "Tip: Cute names usually aren't Protective, but this one works!";
+    if (style === 'Royal' && emotion === 'Funny') return "Tip: Royal names are rarely Funny. Expect some irony!";
     return null;
 }

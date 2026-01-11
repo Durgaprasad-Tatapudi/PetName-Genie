@@ -2,18 +2,27 @@ const HISTORY_KEY = 'petname_genie_history_storage';
 const MAX_HISTORY = 50;
 
 export function getHistory() {
-    const data = localStorage.getItem(HISTORY_KEY); 
-    return data ? JSON.parse(data) : [];
+    try {
+        const data = localStorage.getItem(HISTORY_KEY); 
+        return data ? JSON.parse(data) : [];
+    } catch (e) {
+        console.error("History Access Error", e);
+        return [];
+    }
 }
 
 export function addToHistory(nameObj) {
     let history = getHistory();
-    // Avoid duplicates
+    // Prevent duplicates based on name match
     if (history.some(h => h.name === nameObj.name)) return false; 
 
     const timestamp = Date.now();
-    // Initialize rating as 0 or null
-    history.unshift({ ...nameObj, timestamp, rating: 0 });
+    // Add new item to TOP
+    history.unshift({ 
+        ...nameObj, 
+        timestamp, 
+        rating: 0 // 0=none, 1=like, 2=love
+    });
     
     if (history.length > MAX_HISTORY) {
         history = history.slice(0, MAX_HISTORY);
@@ -37,15 +46,22 @@ export function updateRating(name, rating) {
     let history = getHistory();
     const item = history.find(h => h.name === name);
     if (item) {
-        item.rating = rating; // 0, 1 (liked), 2 (loved/starred) etc.
-        // Re-ordering logic? Usually liked items don't jump to top unless requested.
-        // For simple update:
+        item.rating = rating; 
         save(history);
         return true;
     }
     return false;
 }
 
+export function getLatestItem() {
+    const h = getHistory();
+    return h.length > 0 ? h[0] : null;
+}
+
 function save(history) {
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    try {
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    } catch (e) {
+        console.error("History Save Error", e);
+    }
 }

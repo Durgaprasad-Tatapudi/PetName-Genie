@@ -8,11 +8,13 @@ export const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 export async function loadJSON(url) {
     try {
         const response = await fetch(url);
-        if (!response.ok) throw new Error(`Failed to load ${url}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status} for ${url}`);
+        }
         return await response.json();
     } catch (error) {
-        console.error("JSON fetch error:", error);
-        return null;
+        console.error(`Failed to load ${url}:`, error);
+        throw error; // Propagate error to caller
     }
 }
 

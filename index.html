@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="auto">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetName Genie</title>
     <meta name="description" content="Generate unique and meaningful names for your pets with PetName Genie.">
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,6 +20,7 @@
     <!-- Favicon (using logo svg) -->
     <link rel="icon" type="image/png" href="assets/images/logo.png">
 </head>
+
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
@@ -39,7 +41,14 @@
     </header>
 
     <div class="branding-section container">
-        <img src="assets/images/logo.png" alt="PetName Genie Logo" class="brand-logo">
+        <div class="logo-3d-container" style="position: relative; display: inline-block;">
+            <!-- Fallback Image -->
+            <img src="assets/images/logo.png" alt="PetName Genie Logo" class="brand-logo logo-3d"
+                style="position: absolute; top:0; left:0; right:0; margin:auto;">
+            <!-- Real 3D Canvas -->
+            <canvas id="hero-canvas" width="160" height="160"
+                style="width: 160px; height: 160px; cursor: pointer;"></canvas>
+        </div>
         <h1 class="brand-title">PetName Genie</h1>
     </div>
 
@@ -66,12 +75,14 @@
                     <!-- Pet Type -->
                     <div class="form-group">
                         <label for="pet-type">Pet Type</label>
-                        <select id="pet-type" name="pet-type" required>
-                            <option value="Dog">Dog 🐕</option>
-                            <option value="Cat">Cat 🐈</option>
-                            <option value="Bird">Bird 🦜</option>
-                            <option value="Rabbit">Rabbit 🐇</option>
-                        </select>
+                        <div class="input-wrapper-3d">
+                            <select id="pet-type" name="pet-type" required>
+                                <option value="Dog">Dog 🐕</option>
+                                <option value="Cat">Cat 🐈</option>
+                                <option value="Bird">Bird 🦜</option>
+                                <option value="Rabbit">Rabbit 🐇</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Gender -->
@@ -92,46 +103,54 @@
                     <!-- Emotional Bond -->
                     <div class="form-group">
                         <label for="pet-emotion">Emotional Bond</label>
-                        <select id="pet-emotion" name="emotion">
-                            <option value="Loving">Loving ❤️</option>
-                            <option value="Playful">Playful 🎾</option>
-                            <option value="Protective">Protective 🛡️</option>
-                            <option value="Proud">Proud 🏆</option>
-                            <option value="Funny">Funny 🤪</option>
-                        </select>
+                        <div class="input-wrapper-3d">
+                            <select id="pet-emotion" name="emotion">
+                                <option value="Loving">Loving ❤️</option>
+                                <option value="Playful">Playful 🎾</option>
+                                <option value="Protective">Protective 🛡️</option>
+                                <option value="Proud">Proud 🏆</option>
+                                <option value="Funny">Funny 🤪</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Name Style -->
                     <div class="form-group">
                         <label for="name-style">Style</label>
-                        <select id="name-style" name="style">
-                            <option value="Any">Any Style</option>
-                            <option value="Cute">Cute</option>
-                            <option value="Strong">Strong</option>
-                            <option value="Royal">Royal</option>
-                            <option value="Modern">Modern</option>
-                        </select>
+                        <div class="input-wrapper-3d">
+                            <select id="name-style" name="style">
+                                <option value="Any">Any Style</option>
+                                <option value="Cute">Cute</option>
+                                <option value="Strong">Strong</option>
+                                <option value="Royal">Royal</option>
+                                <option value="Modern">Modern</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Origin -->
                     <div class="form-group">
                         <label for="name-origin">Origin / Culture</label>
-                        <select id="name-origin" name="origin">
-                            <option value="Global">Global 🌍</option>
-                            <option value="Indian">Indian 🇮🇳</option>
-                            <option value="Western">Western 🤠</option>
-                            <option value="Cute">Cute Nicknames 🍬</option>
-                        </select>
+                        <div class="input-wrapper-3d">
+                            <select id="name-origin" name="origin">
+                                <option value="Global">Global 🌍</option>
+                                <option value="Indian">Indian 🇮🇳</option>
+                                <option value="Western">Western 🤠</option>
+                                <option value="Cute">Cute Nicknames 🍬</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Meaning Language -->
                     <div class="form-group">
                         <label for="meaning-lang">Meaning Language</label>
-                        <select id="meaning-lang" name="meaning-lang">
-                            <option value="en">English</option>
-                            <option value="te">Telugu</option>
-                            <option value="hi">Hindi</option>
-                        </select>
+                        <div class="input-wrapper-3d">
+                            <select id="meaning-lang" name="meaning-lang">
+                                <option value="en">English</option>
+                                <option value="te">Telugu</option>
+                                <option value="hi">Hindi</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -141,11 +160,36 @@
                     <div class="form-grid mt-1">
                         <div class="form-group">
                             <label for="pet-age">Age (Years)</label>
-                            <input type="number" id="pet-age" min="0" max="30" placeholder="e.g. 2">
+                            <div class="input-wrapper-3d">
+                                <input type="number" id="pet-age" min="0" max="30" placeholder="e.g. 2">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="pet-image">Photo</label>
-                            <input type="file" id="pet-image" accept="image/*">
+                            <input type="file" id="pet-image" accept="image/*" capture="environment">
+
+                            <!-- Camera Permission UI -->
+                            <div class="camera-control-section" style="margin-top: 0.5rem;">
+                                <button type="button" id="start-camera-btn" class="btn btn-secondary"
+                                    style="width:100%; font-size: 0.9rem;">
+                                    📷 Camera
+                                </button>
+                                <p class="help-text"
+                                    style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">
+                                    Optional: Use camera to capture a pet image.<br>
+                                    <span class="security-note" style="color: #eab308; font-weight: 500;"></span>
+                                </p>
+                            </div>
+
+                            <!-- Camera Preview & Capture -->
+                            <div id="camera-container" class="camera-container" hidden>
+                                <video id="camera-preview" autoplay playsinline muted></video>
+                                <canvas id="camera-canvas" hidden></canvas> <!-- Hidden canvas for capture -->
+                                <div class="camera-actions">
+                                    <button type="button" id="capture-btn" class="btn btn-primary">Take Photo</button>
+                                    <button type="button" id="stop-camera-btn" class="btn btn-secondary">Cancel</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </details>
@@ -166,10 +210,10 @@
             <div class="section-header">
                 <h2>Generated Names</h2>
                 <div class="results-actions">
-                   <button id="clear-results" class="text-btn">Clear</button>
+                    <button id="clear-results" class="text-btn">Clear</button>
                 </div>
             </div>
-            
+
             <div id="results-grid" class="results-grid">
                 <!-- Cards injected by JS -->
             </div>
@@ -203,4 +247,5 @@
     <script type="module" src="assets/js/history.js"></script>
     <script type="module" src="assets/js/app.js"></script>
 </body>
+
 </html>
